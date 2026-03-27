@@ -4,6 +4,8 @@ import { product } from "../pages/product.js";
 import { order } from "../pages/order.js";
 import { customer } from "../pages/customer.js";
 import { report } from "../pages/report.js";
+import { isTokenExpired } from "./api.js";
+import { refreshAccessToken } from "./auth.js";
 
 const routes = {
     "/": home,
@@ -14,10 +16,20 @@ const routes = {
 };
 const app = document.querySelector("#app");
 
-const render = () => {
-    if (!localStorage.getItem("access_token")) {
-        window.location.href = "login.html";
-        return;
+const render = async () => {
+    // check token
+    let token = localStorage.getItem("access_token");
+
+    if (!token || isTokenExpired(token)) {
+        console.log("Token expired or about to expire. Refreshing...");
+
+        const newToken = await refreshAccessToken();
+
+        // refresh token hết hạn cho out luôn
+        if (!newToken) {
+            window.location.href = "login.html";
+            return;
+        }
     }
 
     // sử dụng khi sài live sever
@@ -31,7 +43,17 @@ const render = () => {
 
     document.querySelector("#sidebar").innerHTML = sidebar();
 
-    app.innerHTML = typeof page === "function" ? page() : page;
+    app.innerHTML = "";
+
+    if (typeof page === "function") {
+        const content = await page();
+
+        if (content instanceof HTMLElement) {
+            app.appendChild(content);
+        } else {
+            app.innerHTML = content;
+        }
+    }
 
     bindLinks();
 };
