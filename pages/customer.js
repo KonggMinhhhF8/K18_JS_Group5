@@ -1,3 +1,3 @@
-export function customer() {
+export async function customer() {
     return `customer page`;
 }

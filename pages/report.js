@@ -1,3 +1,3 @@
-export function report() {
+export async function report() {
     return `Report page`;
 }

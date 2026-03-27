@@ -1,3 +1,3 @@
-export function order() {
+export async function order() {
     return `order page`;
 }
