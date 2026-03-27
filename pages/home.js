@@ -1,6 +1,5 @@
 import { fetchWithAuth } from "../js/api.js";
-
-const API_URL = "https://k305jhbh09.execute-api.ap-southeast-1.amazonaws.com";
+import { API_URL } from "../js/api.js";
 
 // cách tạo hàm get gì đó vd:
 const getCategory = async () => {

@@ -1,5 +1,8 @@
 import { refreshAccessToken } from "./auth.js";
 
+export const API_URL =
+    "https://k305jhbh09.execute-api.ap-southeast-1.amazonaws.com";
+
 export function isTokenExpired(token) {
     if (!token) return true;
     try {
