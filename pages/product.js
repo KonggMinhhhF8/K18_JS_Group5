@@ -1,3 +1,5 @@
+import { editProductPage } from "../components/editProductPage.js";
+
 export async function product() {
-    return `product page`;
+  return editProductPage();
 }
