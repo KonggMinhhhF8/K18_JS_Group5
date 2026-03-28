@@ -1,4 +1,6 @@
 import { fetchWithAuth } from "../js/api.js";
+import { createSummary } from "../components/summary.js";
+
 
 // cách tạo hàm get gì đó vd:
 const getCategory = async () => {
@@ -47,6 +49,9 @@ export async function home() {
             <button id="btn-save">Lưu</button>
         </div>
     `;
+
+    const summary = createSummary();
+    container.appendChild(summary);
 
     // get DOM và xử lý luôn
     const input = container.querySelector("#input");

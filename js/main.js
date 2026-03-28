@@ -4,8 +4,11 @@ import { product } from "../pages/product.js";
 import { order } from "../pages/order.js";
 import { customer } from "../pages/customer.js";
 import { report } from "../pages/report.js";
+
 import { isTokenExpired } from "./api.js";
 import { refreshAccessToken } from "./auth.js";
+
+
 
 const routes = {
     "/": home,
