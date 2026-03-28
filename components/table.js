@@ -21,7 +21,12 @@ export function commonTable(container, columns, dataSource) {
         columns.forEach((col) => {
             const td = document.createElement("td");
             if (col.render && typeof col.render === "function") {
-                td.innerHTML = col.render(row[col.dataIndex], row) || "";
+                const result = col.render(row[col.dataIndex], row);
+                if (result instanceof Node) {
+                    td.appendChild(result);
+                } else {
+                    td.innerHTML = result || "";
+                }
             } else {
                 td.textContent = row[col.dataIndex] ?? "";
             }
