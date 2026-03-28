@@ -2,48 +2,48 @@ import { fetchData } from "../apis/api.js";
 import { commonTable } from "../components/table.js";
 
 export async function customer() {
+
     const getCustomer = await fetchData.get("customers");
-
-    function getRankColor(rank) {
-        switch (rank?.toUpperCase()) {
-            case "GOLD":
-                return "gold";
-            case "SILVER":
-                return "silver";
-            case "BRONZE":
-                return "#cd7f32";
-            default:
-                return "#ccc";
-        }
+  function getRankColor(rank) {
+    switch (rank?.toUpperCase()) {
+      case "GOLD":
+        return "gold";
+      case "SILVER":
+        return "silver";
+      case "BRONZE":
+        return "#cd7f32";
+      default:
+        return "#ccc";
     }
+  }
 
-    function getRankVN(rank) {
-        switch (rank?.toUpperCase()) {
-            case "GOLD":
-                return "VÀNG";
-            case "SILVER":
-                return "BẠC";
-            case "BRONZE":
-                return "ĐỒNG";
-            default:
-                return "-";
-        }
+  function getRankVN(rank) {
+    switch (rank?.toUpperCase()) {
+      case "GOLD":
+        return "VÀNG";
+      case "SILVER":
+        return "BẠC";
+      case "BRONZE":
+        return "ĐỒNG";
+      default:
+        return "-";
     }
+  }
 
-    const columns = [
-        {
-            title: "Khách hàng",
-            dataIndex: "name",
-            render: (_, row) => {
-                const initials = row.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .substring(0, 2)
-                    .toUpperCase();
-                const bgColor = "#f0f0f0";
-                const textColor = "#333";
-                return `
+  const columns = [
+    {
+      title: "Khách hàng",
+      dataIndex: "name",
+      render: (_, row) => {
+        const initials = row.name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .substring(0, 2)
+          .toUpperCase();
+        const bgColor = "#f0f0f0";
+        const textColor = "#333";
+        return `
               <div class="cust-info">
                 <div class="avatar" style="background: ${bgColor}; color: ${textColor};">
                   ${initials}
@@ -54,6 +54,7 @@ export async function customer() {
                 </div>
               </div>
             `;
+
             },
         },
         {
@@ -82,12 +83,13 @@ export async function customer() {
             render: (value) => `
             <button class="btn-icon edit btn-action" title="Sửa"><i class="fas fa-edit"></i></button>
             <button class="btn-icon delete btn-action" itle="Xóa"><i class="fas fa-trash"></i></button>
-          `,
-        },
-    ];
 
-    const container = document.createElement("div");
-    container.innerHTML = `
+          `,
+    },
+  ];
+
+  const container = document.createElement("div");
+  container.innerHTML = `
             <header>
               <div class="search-bar">
                 <input type="text" placeholder="Tìm tên, email hoặc số điện thoại...">
@@ -123,6 +125,7 @@ export async function customer() {
               <div class="table-wrapper"></div>
             </section>
         `;
+
 
     const tableWrapper = container.querySelector(".table-wrapper");
     commonTable(tableWrapper, columns, getCustomer);

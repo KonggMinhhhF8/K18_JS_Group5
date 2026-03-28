@@ -3,6 +3,7 @@ import { home } from "../pages/home.js";
 import { product } from "../pages/product.js";
 import { order } from "../pages/order.js";
 import { customer } from "../pages/customer.js";
+import { createCustomer } from "../pages/create-customer.js";
 import { report } from "../pages/report.js";
 import { checkAndRefreshToken } from "../apis/auth.js";
 
@@ -12,6 +13,7 @@ const routes = {
     "/orders": order,
     "/customers": customer,
     "/reports": report,
+    "/customers/create": createCustomer,
 };
 const app = document.querySelector("#app");
 
