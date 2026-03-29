@@ -97,10 +97,10 @@ export async function createProduct(params = {}) {
                                 ${categories
                                     .filter((cat) =>
                                         [
-                                            "Desktop",
-                                            "Smartphone",
-                                            "Tablet",
-                                            "Accessory",
+                                            "Máy tính",
+                                            "Điện thoại",
+                                            "Máy tính bảng",
+                                            "Phụ kiện",
                                         ].includes(cat.name),
                                     )
                                     .map(
