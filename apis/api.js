@@ -23,7 +23,7 @@ async function fetchWithAuth(endpoint, method = "GET", payload = null) {
     try {
         let response = await fetch(`${API_URL}/${endpoint}`, options);
 
-        if (response.status === 401 || response.status === 400) {
+        if (response.status === 401) {
             console.warn("Token expired, attempting to refresh...");
             const newToken = await refreshAccessToken();
 

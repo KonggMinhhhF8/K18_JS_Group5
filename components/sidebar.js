@@ -26,12 +26,8 @@ const pageTitles = [
     },
 ];
 
-export function sidebar() {
-    // Get path in live server
-    const cuurentPath = window.location.hash || "/";
-
-    // server
-    // const cuurentPath = window.location.pathName;
+export function sidebar(cuurentPath) {
+    cuurentPath = window.location.hash || "/";
 
     return `
             <h2 class="">ShopAdmin</h2>

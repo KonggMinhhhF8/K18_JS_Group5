@@ -99,11 +99,11 @@ export async function customer() {
                         console.log("Delete id:", value);
                     }
                 });
-
                 fragment.appendChild(editBtn);
                 fragment.appendChild(deleteBtn);
                 return fragment;
             },
+
         },
     ];
 
