@@ -16,34 +16,62 @@ const routes = {
     "/customers/create": createCustomer,
 };
 const app = document.querySelector("#app");
+let authCheckTimeout = null;
 
-const render = async () => {
-    // check refresh token
-    if (!(await checkAndRefreshToken())) return null;
+async function startAutoRefresh() {
+    // Xóa timeout cũ nếu có để tránh trùng lặp
+    if (authCheckTimeout) clearTimeout(authCheckTimeout);
 
-    // sử dụng khi sài live sever
-    const path = window.location.hash.replace("#", "") || "/";
+    const token = localStorage.getItem("access_token");
 
-    // có server
-    // const path = window.location.pathname
-
-    const page = routes[path] || null;
-
-    document.querySelector("#sidebar").innerHTML = sidebar();
-
-    app.innerHTML = "";
-
-    if (typeof page === "function") {
-        const content = await page();
-
-        if (content instanceof HTMLElement) {
-            app.appendChild(content);
-        } else {
-            app.innerHTML = content;
+    if (token) {
+        try {
+            // Đợi hàm check hoàn tất
+            await checkAndRefreshToken();
+        } catch (error) {
+            console.error("Lỗi khi auto refresh:", error);
         }
     }
 
-    bindLinks();
+    // check lại sau 9 phút.
+    authCheckTimeout = setTimeout(startAutoRefresh, 60 * 1000);
+}
+
+startAutoRefresh();
+
+const render = async () => {
+    try {
+        // check refresh token
+        const isAuth = await checkAndRefreshToken();
+        if (!isAuth) {
+            return;
+        }
+
+        // sử dụng khi sài live sever
+        const path = window.location.hash.replace("#", "") || "/";
+
+        // có server
+        // const path = window.location.pathname
+
+        const page = routes[path] || null;
+        document.querySelector("#sidebar").innerHTML = sidebar();
+
+        app.innerHTML = "";
+
+        if (typeof page === "function") {
+            const content = await page();
+
+            if (content instanceof HTMLElement) {
+                app.appendChild(content);
+            } else {
+                app.innerHTML = content;
+            }
+        }
+
+        bindLinks();
+    } catch (error) {
+        console.error("Lỗi hệ thống:", error);
+    }
 };
 
 const bindLinks = () => {
