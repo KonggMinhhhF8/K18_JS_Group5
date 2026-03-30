@@ -36,7 +36,7 @@ const rerenderOrder = async (oldContainer) => {
 };
 
 const formatNumber = (value) => {
-  return new Intl.NumberFormat("vi-VN").format(value || 0);
+  return new Number(value) || 0;
 };
 
 const getSummaryList = (orders) => {
