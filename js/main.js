@@ -5,9 +5,11 @@ import { order } from "../pages/orders.js";
 import { customer } from "../pages/customer.js";
 import { report } from "../pages/report.js";
 import { checkAndRefreshToken } from "../apis/auth.js";
-import { createCustomer } from "../pages/create-customer.js";
-import { createProduct } from "../pages/create-product.js";
-import { createOrder } from "../pages/create-order.js";
+import {
+    createProduct,
+    createOrder,
+    createCustomer,
+} from "../pages/creates.js";
 
 const routes = {
     "/": home,
@@ -17,9 +19,10 @@ const routes = {
     "/reports": report,
     "/products/create": createProduct,
     "/products/edit/:id": createProduct,
+    "/orders/create": createOrder,
+    "/orders/create/:id": createOrder,
     "/customers/create": createCustomer,
     "/customers/edit/:id": createCustomer,
-    "/order/create": createOrder,
 };
 const app = document.querySelector("#app");
 let authCheckTimeout = null;

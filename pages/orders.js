@@ -2,6 +2,7 @@ import { fetchData } from "../apis/api.js";
 import { createSummary } from "../components/summary.js";
 import { commonTable } from "../components/table.js";
 
+// Order Page Cường
 const setStatus = (_, row) => {
     const status = {
         done: ["Hoàn thành", "completed"],
@@ -41,9 +42,13 @@ const formatNumber = (value) => {
 
 const getSummaryList = (orders) => {
     const totalOrders = orders.length;
-    const pendingOrders = orders.filter((item) => item.status === "pending").length;
+    const pendingOrders = orders.filter(
+        (item) => item.status === "pending",
+    ).length;
     const doneOrders = orders.filter((item) => item.status === "done").length;
-    const cancelOrders = orders.filter((item) => item.status === "cancel" || item.status === "cancelled").length;
+    const cancelOrders = orders.filter(
+        (item) => item.status === "cancel" || item.status === "cancelled",
+    ).length;
 
     return [
         {
@@ -72,7 +77,10 @@ const getSummaryList = (orders) => {
 export async function order() {
     const getOrders = await fetchData.get("orders");
     const orders = (getOrders || []).map((order) => {
-        return { ...order, payment: order.amount * (order.product?.price || 0) };
+        return {
+            ...order,
+            payment: order.amount * (order.product?.price || 0),
+        };
     });
 
     const columns = [
@@ -118,12 +126,16 @@ export async function order() {
                     editBtn.innerHTML = `<i class="fas fa-check"></i>`;
 
                     editBtn.addEventListener("click", async () => {
-                        const isUpdate = confirm("bạn muốn update tiến độ không?");
+                        const isUpdate = confirm(
+                            "bạn muốn update tiến độ không?",
+                        );
                         if (!isUpdate) return;
 
-                        const nextStatus = row.status === "pending" ? "delivering" : "done";
+                        const nextStatus =
+                            row.status === "pending" ? "delivering" : "done";
 
-                        editBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                        editBtn.innerHTML =
+                            '<i class="fas fa-spinner fa-spin"></i>';
                         editBtn.style.pointerEvents = "none";
 
                         const res = await fetchData.update("orders", {
@@ -153,7 +165,8 @@ export async function order() {
                 deleteBtn.addEventListener("click", async () => {
                     if (!confirm("Bạn có chắc muốn xóa?")) return;
 
-                    deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                    deleteBtn.innerHTML =
+                        '<i class="fas fa-spinner fa-spin"></i>';
                     deleteBtn.style.pointerEvents = "none";
 
                     const res = await fetchData.delete("orders", value);
@@ -212,9 +225,18 @@ export async function order() {
         const keyword = normalize(searchInput.value);
 
         return orders.filter((row) => {
-            const matchStatus = activeStatus === "all" ? true : row.status === activeStatus;
+            const matchStatus =
+                activeStatus === "all" ? true : row.status === activeStatus;
 
-            const searchText = [row.id, row.customer?.name, row.customer?.phone, row.product?.name, row.status].map(normalize).join(" ");
+            const searchText = [
+                row.id,
+                row.customer?.name,
+                row.customer?.phone,
+                row.product?.name,
+                row.status,
+            ]
+                .map(normalize)
+                .join(" ");
 
             const matchKeyword = !keyword || searchText.includes(keyword);
 
@@ -254,3 +276,157 @@ export async function order() {
 
     return container;
 }
+
+// Order page (Hiếu)
+// {import { fetchData } from "../apis/api.js";
+// import { createFilter } from "../components/filter.js";
+// import { createSummary } from "../components/summary.js";
+// import { commonTable } from "../components/table.js";
+// import {
+//     getStatus,
+//     getStatusColor,
+//     formatAndMaskPhone,
+//     formatVND,
+//     createActionButtons,
+// } from "../utils.js";
+
+// export async function order() {
+//     const container = document.createElement("div");
+//     container.innerHTML = `
+//         <header class="header">
+//             <div class="search-bar">
+//                 <input type="text" placeholder="Tìm mã đơn, tên khách hàng...">
+//             </div>
+//             <a href="#/orders/create" class="btn-add"><i class="fa-solid fa-cart-arrow-down"></i> Thêm đơn hàng</a>
+//         </header>
+//         <div class="stats-wrapper"></div>
+//         <section class="table-container">
+//             <div class="table-header">
+//                 <div id="tabFilter" class="tabs">
+//                     <button class="tab active" data-value="ALL">Tất cả</button>
+//                     <button class="tab" data-value="PENDING">Chờ xử lý</button>
+//                     <button class="tab" data-value="DELIVERING">Đang giao</button>
+//                     <button class="tab" data-value="DONE">Đã xong</button>
+//                 </div>
+//                 <div class ="data-filter">
+//                     <input  type="date" id="dateFilter" style="padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
+//                 </div>
+//             </div>
+//             <div class="table-wrapper"></div>
+//         </section>
+//     `;
+
+//     const tableWrapper = container.querySelector(".table-wrapper");
+//     const statsWrapper = container.querySelector(".stats-wrapper");
+//     const searchInput = container.querySelector(".search-bar input");
+//     const tab = container.querySelector("#tabFilter");
+
+//     async function loadAndRender() {
+//         const orders = await fetchData.get("orders");
+
+//         const columns = [
+//             {
+//                 title: "Mã đơn",
+//                 dataIndex: "id",
+//                 render: (value) => `<strong>#ORD-${value}</strong>`,
+//             },
+//             {
+//                 title: "Khách hàng",
+//                 dataIndex: "customer",
+//                 render: (value) => {
+//                     return `
+//                         ${value.name}<br>
+//                         <small>${formatAndMaskPhone(value.phone)}</small>
+//                     `;
+//                 },
+//             },
+//             {
+//                 title: "Sản phẩm",
+//                 dataIndex: "product",
+//                 render: (value) => value.name,
+//             },
+//             {
+//                 title: "Số lượng / Giá tiền",
+//                 render: (_, row) => {
+//                     const amount = row.amount;
+//                     const price = row.product.price;
+//                     return `${amount} x ${formatVND(price)}`;
+//                 },
+//             },
+//             {
+//                 title: "Tổng tiền",
+//                 render: (_, row) => {
+//                     const total = row.product.price * row.amount;
+//                     return formatVND(total);
+//                 },
+//             },
+//             {
+//                 title: "Trạng thái",
+//                 dataIndex: "status",
+//                 render: (value) =>
+//                     `<span class="status ${getStatusColor(value)}">${getStatus(value).toUpperCase()}</span>`,
+//             },
+//             {
+//                 title: "Thao tác",
+//                 dataIndex: "id",
+//                 render: (value) =>
+//                     createActionButtons({
+//                         id: value,
+//                         endpoint: "orders",
+//                         onSuccess: loadAndRender,
+//                     }),
+//             },
+//         ];
+
+//         commonTable(tableWrapper, columns, orders);
+
+//         statsWrapper.innerHTML = "";
+
+//         const totalOrder = orders?.length || 0;
+//         const penidngOrder =
+//             orders?.filter((o) => o.status === "pending").length || 0;
+//         const doneOrder =
+//             orders?.filter((o) => o.status === "done").length || 0;
+//         const cancelOrder =
+//             orders?.filter((o) => o.status === "cancel").length || 0;
+
+//         const summaryEl = createSummary([
+//             {
+//                 title: "Tổng đơn hàng",
+//                 value: totalOrder,
+//                 cardColor: "blue",
+//             },
+//             {
+//                 title: "Đang xử lý",
+//                 value: penidngOrder,
+//                 cardColor: "orange",
+//             },
+//             { title: "Thành công", value: doneOrder, cardColor: "green" },
+//             { title: "Đã hủy", value: cancelOrder, cardColor: "red" },
+//         ]);
+//         statsWrapper.appendChild(summaryEl);
+
+//         const formatOrders = orders.map((order) => ({
+//             ...order,
+//             customerName: order.customer?.name || "N/A",
+//         }));
+
+//         createFilter({
+//             data: formatOrders,
+//             searchFields: ["customerName", "id"],
+//             searchEl: searchInput,
+//             filterEl: tab,
+//             getFilterValue: (item, val) =>
+//                 val === "ALL" ? true : item.status?.toUpperCase() === val,
+//             render: (filteredData) => {
+//                 tableWrapper.innerHTML = "";
+//                 commonTable(tableWrapper, columns, filteredData);
+//             },
+//         });
+//     }
+
+//     await loadAndRender();
+
+//     return container;
+// }
+// }
