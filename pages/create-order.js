@@ -127,12 +127,8 @@ export async function createOrder() {
             imageId: "",
             id: formData.productId,
         };
-        console.log(updatedProductPayload);
 
         const pro = await fetchData.update("products", { ...updatedProductPayload });
-
-        console.log(pro);
-        console.log(newOrder);
 
         if (newOrder?.status === "pending") {
             alert("Tạo đơn hàng thành công");
