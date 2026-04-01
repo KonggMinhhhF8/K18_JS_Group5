@@ -189,7 +189,7 @@ export async function createProduct(params = {}) {
                     if (id) {
                         response = await fetchData.update("products", {
                             ...payload,
-                            id,
+                            id: id,
                         });
                         window.location.hash = "/products";
                     } else {
@@ -208,155 +208,156 @@ export async function createProduct(params = {}) {
 }
 
 // Create order (Cường)
-export async function createOrder() {
-    const products = await fetchData.get("products");
 
-    const customers = await fetchData.get("customers");
+// export async function createOrder() {
+//     const products = await fetchData.get("products");
 
-    const container = document.createElement("div");
+//     const customers = await fetchData.get("customers");
 
-    container.innerHTML = `<div class="header-actions">
-            <a href="#/orders" class="btn-back">
-                <i class="fas fa-arrow-left"></i> Quay lại order
-            </a>
-             <h1>create order</h1>
-        </div>
-         <form id="customerForm">
-            <div class="form form-one-col" >
-                <div class="card">
-                    <div class="form-group">
-                        <label>Khách hàng</label>
-                        <select name="customerId">
-                            <option value="">Chọn khách hàng</option>
-                            ${customers
-                                .map((customer) => {
-                                    return `<option value="${customer.id}">${customer.name}</option>`;
-                                })
-                                .join("")}
-                        </select>
-                    </div>
+//     const container = document.createElement("div");
 
-                    <div class="form-group">
-                        <label> Sản phẩm </label>
-                         <select name="productId">
-                            <option value="">Chọn sản phẩm</option>
-                            ${products
-                                .map((product) => {
-                                    return `<option value="${product.id}">${product.name}</option>`;
-                                })
-                                .join("")}
-                        </select>
-                    </div>
+//     container.innerHTML = `<div class="header-actions">
+//             <a href="#/orders" class="btn-back">
+//                 <i class="fas fa-arrow-left"></i> Quay lại order
+//             </a>
+//              <h1>create order</h1>
+//         </div>
+//          <form id="customerForm">
+//             <div class="form form-one-col" >
+//                 <div class="card">
+//                     <div class="form-group">
+//                         <label>Khách hàng</label>
+//                         <select name="customerId">
+//                             <option value="">Chọn khách hàng</option>
+//                             ${customers
+//                                 .map((customer) => {
+//                                     return `<option value="${customer.id}">${customer.name}</option>`;
+//                                 })
+//                                 .join("")}
+//                         </select>
+//                     </div>
 
-                    <div class="form-group">
-                        <label>Số lượng</label>
-                         <input name="amount" type="number" />
-                    </div>
-                </div>
-            </div>
+//                     <div class="form-group">
+//                         <label> Sản phẩm </label>
+//                          <select name="productId">
+//                             <option value="">Chọn sản phẩm</option>
+//                             ${products
+//                                 .map((product) => {
+//                                     return `<option value="${product.id}">${product.name}</option>`;
+//                                 })
+//                                 .join("")}
+//                         </select>
+//                     </div>
 
-            <div class="form-footer">
-                <button type="reset" class="btn btn-cancel">Hủy bỏ</button>
-                <button type="submit" class="btn btn-save">Lưu đơn hàng</button>
-            </div>
-        </form>
-    `;
+//                     <div class="form-group">
+//                         <label>Số lượng</label>
+//                          <input name="amount" type="number" />
+//                     </div>
+//                 </div>
+//             </div>
 
-    const form = container.querySelector("#customerForm");
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const formData = Object.fromEntries(new FormData(form).entries());
+//             <div class="form-footer">
+//                 <button type="reset" class="btn btn-cancel">Hủy bỏ</button>
+//                 <button type="submit" class="btn btn-save">Lưu đơn hàng</button>
+//             </div>
+//         </form>
+//     `;
 
-        formData.customerId = Number(formData.customerId);
-        formData.productId = Number(formData.productId);
-        formData.amount = Number(formData.amount);
+//     const form = container.querySelector("#customerForm");
+//     form.addEventListener("submit", async (e) => {
+//         e.preventDefault();
+//         const formData = Object.fromEntries(new FormData(form).entries());
 
-        if (Number.isNaN(formData.customerId) || formData.customerId <= 0) {
-            alert("Khách hàng không hợp lệ");
-            return;
-        }
+//         formData.customerId = Number(formData.customerId);
+//         formData.productId = Number(formData.productId);
+//         formData.amount = Number(formData.amount);
 
-        if (Number.isNaN(formData.productId) || formData.productId <= 0) {
-            alert("Sản phẩm không hợp lệ");
-            return;
-        }
+//         if (Number.isNaN(formData.customerId) || formData.customerId <= 0) {
+//             alert("Khách hàng không hợp lệ");
+//             return;
+//         }
 
-        if (Number.isNaN(formData.amount) || formData.amount <= 0) {
-            alert("Số lượng không hợp lệ");
-            return;
-        }
+//         if (Number.isNaN(formData.productId) || formData.productId <= 0) {
+//             alert("Sản phẩm không hợp lệ");
+//             return;
+//         }
 
-        const selectedCustomer = customers.find(
-            (c) => c.id === formData.customerId,
-        );
-        const selectedProduct = products.find(
-            (p) => p.id === formData.productId,
-        );
+//         if (Number.isNaN(formData.amount) || formData.amount <= 0) {
+//             alert("Số lượng không hợp lệ");
+//             return;
+//         }
 
-        if (!selectedCustomer) {
-            alert("Khách hàng không hợp lệ");
-            return;
-        }
+//         const selectedCustomer = customers.find(
+//             (c) => c.id === formData.customerId,
+//         );
+//         const selectedProduct = products.find(
+//             (p) => p.id === formData.productId,
+//         );
 
-        if (!selectedProduct) {
-            alert("Sản phẩm không hợp lệ");
-            return;
-        }
+//         if (!selectedCustomer) {
+//             alert("Khách hàng không hợp lệ");
+//             return;
+//         }
 
-        const remaining = selectedProduct.remaining;
+//         if (!selectedProduct) {
+//             alert("Sản phẩm không hợp lệ");
+//             return;
+//         }
 
-        if (Number.isNaN(remaining) || remaining < 0) {
-            alert("Số lượng tồn kho của sản phẩm không hợp lệ");
-            return;
-        }
+//         const remaining = selectedProduct.remaining;
 
-        if (formData.amount > remaining) {
-            alert(`Số lượng vượt quá tồn kho. Chỉ còn ${remaining} sản phẩm.`);
-            return;
-        }
+//         if (Number.isNaN(remaining) || remaining < 0) {
+//             alert("Số lượng tồn kho của sản phẩm không hợp lệ");
+//             return;
+//         }
 
-        const isPostOrder = confirm(`
-                Bạn có muốn tạo đơn hàng này không?
-                Khách hàng: ${selectedCustomer.name}
-                Sản phẩm: ${selectedProduct.name}
-                Số lượng: ${formData.amount}
-                Tồn kho còn lại sau khi tạo: ${remaining - formData.amount}
-            `);
+//         if (formData.amount > remaining) {
+//             alert(`Số lượng vượt quá tồn kho. Chỉ còn ${remaining} sản phẩm.`);
+//             return;
+//         }
 
-        if (!isPostOrder) return;
+//         const isPostOrder = confirm(`
+//                 Bạn có muốn tạo đơn hàng này không?
+//                 Khách hàng: ${selectedCustomer.name}
+//                 Sản phẩm: ${selectedProduct.name}
+//                 Số lượng: ${formData.amount}
+//                 Tồn kho còn lại sau khi tạo: ${remaining - formData.amount}
+//             `);
 
-        const newOrder = await fetchData.create("orders", {
-            ...formData,
-            status: "pending",
-        });
+//         if (!isPostOrder) return;
 
-        const updatedProductPayload = {
-            categoryId: selectedProduct.category.id,
-            name: selectedProduct.name,
-            sku: selectedProduct.sku,
-            price: selectedProduct.price,
-            remaining: remaining - formData.amount,
-            imageId: "",
-            id: formData.productId,
-        };
+//         const newOrder = await fetchData.create("orders", {
+//             ...formData,
+//             status: "pending",
+//         });
 
-        const pro = await fetchData.update("products", {
-            ...updatedProductPayload,
-        });
+//         const updatedProductPayload = {
+//             categoryId: selectedProduct.category.id,
+//             name: selectedProduct.name,
+//             sku: selectedProduct.sku,
+//             price: selectedProduct.price,
+//             remaining: remaining - formData.amount,
+//             imageId: "",
+//             id: formData.productId,
+//         };
 
-        if (newOrder?.status === "pending") {
-            alert("Tạo đơn hàng thành công");
-        } else {
-            alert("Đã tạo đơn hàng");
-        }
+//         const pro = await fetchData.update("products", {
+//             ...updatedProductPayload,
+//         });
 
-        selectedProduct.remaining = remaining - formData.amount;
+//         if (newOrder?.status === "pending") {
+//             alert("Tạo đơn hàng thành công");
+//         } else {
+//             alert("Đã tạo đơn hàng");
+//         }
 
-        form.reset();
-    });
+//         selectedProduct.remaining = remaining - formData.amount;
 
-    return container;
-}
+//         form.reset();
+//     });
+
+//     return container;
+// }
 
 // Create customer (Thành)
 export async function createCustomer(params = {}) {
@@ -467,202 +468,200 @@ export async function createCustomer(params = {}) {
 }
 
 // Create order (Hiếu)
-// export async function createOrder(params = {}) {
-//     const container = document.createElement("div");
-//     const id = params?.id;
-//     let initialValues = {};
-//     let products = [];
-//     let customers = [];
-//     const [prodRes, custRes, ordersRes] = await Promise.all([
-//         fetchData.get("products"),
-//         fetchData.get("customers"),
-//         fetchData.get("orders"),
-//     ]);
-//     products = prodRes || [];
-//     customers = custRes || [];
-//     if (id) {
-//         initialValues =
-//             ordersRes.find((item) => String(item.id) === String(id)) || {};
-//     }
-//     container.innerHTML = `
-//         <div class="header-actions">
-//             <a href="#/orders" class="btn-back">
-//                 <i class="fas fa-arrow-left"></i> Quay lại danh sách
-//             </a>
-//             <h2>${id ? `Chỉnh sửa đơn hàng: #${id}` : "Tạo đơn hàng mới"}</h2>
-//         </div>
+export async function createOrder(params = {}) {
+    const container = document.createElement("div");
+    const id = params?.id;
+    let initialValues = {};
+    let products = [];
+    let customers = [];
+    // const [prodRes, custRes, ordersRes] = await Promise.all([
+    //     fetchData.get("products"),
+    //     fetchData.get("customers"),
+    //     fetchData.get("orders"),
+    // ]);
 
-//         <form id="orderForm">
-//             <div class="form">
-//                 <div class="card">
-//                     <div class="form-group">
-//                         <label>Chọn sản phẩm</label>
-//                         <select name="productId" class="select-product">
-//                             ${
-//                                 id
-//                                     ? products
-//                                           .map(
-//                                               (p) => `
-//                                     <option value="${p.id}" ${initialValues.productId === p.id ? "selected" : ""}>
-//                                         ${p.name} - ${formatVND(p.price)}
-//                                     </option>`,
-//                                           )
-//                                           .join("")
-//                                     : `<option value="">-- Chọn sản phẩm --</option>
-//                                     ${products
-//                                         .map(
-//                                             (p) => `
-//                                     <option value="${p.id}" ${initialValues.productId === p.id ? "selected" : ""}>
-//                                         ${p.name} - ${formatVND(p.price)}
-//                                     </option>`,
-//                                         )
-//                                         .join("")}`
-//                             }
-//                         </select>
-//                     </div>
+    const prodRes = await fetchData.get("products");
+    const custRes = await fetchData.get("customers");
+    const ordersRes = await fetchData.get("orders");
 
-//                     <div class="form-group">
-//                         <label>Khách hàng</label>
-//                         <select name="customerId">
-//                             ${
-//                                 id
-//                                     ? customers
-//                                           .map(
-//                                               (c) => `
-//                                     <option value="${c.id}" ${initialValues.customerId === c.id ? "selected" : ""}>
-//                                         ${c.name} (${formatAndMaskPhone(c.phone)})
-//                                     </option>`,
-//                                           )
-//                                           .join("")
-//                                     : `<option value="">-- Chọn khách hàng --</option>
-//                                     ${customers
-//                                         .map(
-//                                             (c) => `
-//                                     <option value="${c.id}" ${initialValues.customerId === c.id ? "selected" : ""}>
-//                                         ${c.name} (${formatAndMaskPhone(c.phone)})
-//                                     </option>`,
-//                                         )
-//                                         .join("")}`
-//                             }
-//                         </select>
-//                     </div>
+    products = prodRes || [];
+    customers = custRes || [];
+    if (id) {
+        initialValues =
+            ordersRes.find((item) => String(item.id) === String(id)) || {};
+    }
+    container.innerHTML = `
+        <div class="header-actions">
+            <a href="#/orders" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Quay lại danh sách
+            </a>
+            <h2>${id ? `Chỉnh sửa đơn hàng: #${id}` : "Tạo đơn hàng mới"}</h2>
+        </div>
 
-//                     <div class="form-group">
-//                         <label>Số lượng</label>
-//                         <input
-//                             type="number"
-//                             name="amount"
-//                             value="${initialValues.amount || ""}"
-//                             placeholder="Nhập số lượng"
-//                         >
-//                     </div>
+        <form id="orderForm">
+            <div class="form">
+                <div class="card">
+                    <div class="form-group">
+                        <label>Chọn sản phẩm</label>
+                        <select name="productId" class="select-product">
+                            ${
+                                id
+                                    ? products
+                                          .map(
+                                              (p) => `
+                                    <option value="${p.id}" ${initialValues.productId === p.id ? "selected" : ""}>
+                                        ${p.name} - ${formatVND(p.price)}
+                                    </option>`,
+                                          )
+                                          .join("")
+                                    : `<option value="">-- Chọn sản phẩm --</option>
+                                    ${products
+                                        .map(
+                                            (p) => `
+                                    <option value="${p.id}" ${initialValues.productId === p.id ? "selected" : ""}>
+                                        ${p.name} - ${formatVND(p.price)}
+                                    </option>`,
+                                        )
+                                        .join("")}`
+                            }
+                        </select>
+                    </div>
 
-//                     <div class="form-group">
-//                         <label>Trạng thái đơn hàng</label>
-//                         <select name="status">
-//                             <option value="pending" ${initialValues.status === "pending" ? "selected" : ""}>PENDING</option>
-//                             <option value="delivering" ${initialValues.status === "delivering" ? "selected" : ""}>DELIVERING</option>
-//                             <option value="done" ${initialValues.status === "done" ? "selected" : ""}>DONE</option>
-//                             <option value="cancel" ${initialValues.status === "cancel" ? "selected" : ""}>CANCEL</option>
-//                         </select>
-//                     </div>
-//                 </div>
-//             </div>
+                    <div class="form-group">
+                        <label>Khách hàng</label>
+                        <select name="customerId">
+                            ${
+                                id
+                                    ? customers
+                                          .map(
+                                              (c) => `
+                                    <option value="${c.id}" ${initialValues.customerId === c.id ? "selected" : ""}>
+                                        ${c.name} (${formatAndMaskPhone(c.phone)})
+                                    </option>`,
+                                          )
+                                          .join("")
+                                    : `<option value="">-- Chọn khách hàng --</option>
+                                    ${customers
+                                        .map(
+                                            (c) => `
+                                    <option value="${c.id}" ${initialValues.customerId === c.id ? "selected" : ""}>
+                                        ${c.name} (${formatAndMaskPhone(c.phone)})
+                                    </option>`,
+                                        )
+                                        .join("")}`
+                            }
+                        </select>
+                    </div>
 
-//             <div class="form-footer">
-//                 <button type="reset" class="btn btn-cancel">Hủy bỏ</button>
-//                 <button type="submit" class="btn btn-save">
-//                     ${id ? "Cập nhật" : "Tạo đơn hàng"}
-//                 </button>
-//             </div>
-//         </form>
-//     `;
+                    <div class="form-group">
+                        <label>Số lượng</label>
+                        <input
+                            type="number"
+                            name="amount"
+                            value="${initialValues.amount || ""}"
+                            placeholder="Nhập số lượng"
+                        >
+                    </div>
+                    
+                </div>
+            </div>
 
-//     const productSelect = container.querySelector('select[name="productId"]');
-//     const amountInput = container.querySelector('input[name="amount"]');
-//     productSelect.addEventListener("change", (e) => {
-//         const p = products.find(
-//             (item) => String(item.id) === String(e.target.value),
-//         );
-//         if (p) {
-//             amountInput.placeholder = `Tối đa ${p.remaining}`;
-//             amountInput.min = 1;
-//             amountInput.max = p.remaining;
-//         }
-//     });
-//     setTimeout(() => {
-//         createForm({
-//             formId: "#orderForm",
-//             initialValues,
-//             fields: [
-//                 { name: "productId", required: true },
-//                 { name: "customerId", required: true },
-//                 { name: "amount" },
-//                 { name: "status" },
-//             ],
-//             onSubmit: async (values) => {
-//                 try {
-//                     const selectedProduct = products.find(
-//                         (p) => String(p.id) === String(values.productId),
-//                     );
-//                     const orderId = window.location.hash.split("/").pop();
-//                     let finalRemaining;
-//                     if (orderId && !isNaN(orderId)) {
-//                         const isOrder = ordersRes.find(
-//                             (o) => Number(o.id) === Number(orderId),
-//                         );
-//                         const oldOrderAmount = Number(isOrder.amount);
-//                         const newOrderAmount = Number(values.amount);
-//                         const currentInventory = Number(
-//                             selectedProduct.remaining,
-//                         );
-//                         finalRemaining =
-//                             currentInventory + oldOrderAmount - newOrderAmount;
-//                     } else {
-//                         finalRemaining =
-//                             Number(selectedProduct.remaining) -
-//                             Number(values.amount);
-//                     }
-//                     console.log(values);
-//                     if (!selectedProduct) {
-//                         alert("Sản phẩm không tồn tại!");
-//                         return;
-//                     }
-//                     if (finalRemaining < 0) {
-//                         alert(
-//                             `Kho không đủ! Hiện còn: ${selectedProduct.remaining}`,
-//                         );
-//                         return;
-//                     }
-//                     let response;
-//                     if (id) {
-//                         response = await fetchData.update("orders", {
-//                             ...values,
-//                             id,
-//                         });
-//                         window.location.hash = "/orders";
-//                     } else {
-//                         response = await fetchData.create("orders", values);
-//                         resetForm("#orderForm");
-//                     }
-//                     if (response) {
-//                         const payload = validateDataPayload.product(
-//                             selectedProduct.category?.id,
-//                             selectedProduct.name,
-//                             {
-//                                 ...selectedProduct,
-//                                 id: selectedProduct.id,
-//                                 remaining: Math.floor(Number(finalRemaining)),
-//                             },
-//                         );
-//                         await fetchData.update("products", payload);
-//                     }
-//                 } catch (error) {
-//                     console.error("Lỗi khi lưu đơn hàng:", error);
-//                 }
-//             },
-//             onCancel: () => (window.location.hash = "/orders"),
-//         });
-//     });
-//     return container;
-// }
+            <div class="form-footer">
+                <button type="reset" class="btn btn-cancel">Hủy bỏ</button>
+                <button type="submit" class="btn btn-save">
+                    ${id ? "Cập nhật" : "Tạo đơn hàng"}
+                </button>
+            </div>
+        </form>
+    `;
+
+    const productSelect = container.querySelector('select[name="productId"]');
+    const amountInput = container.querySelector('input[name="amount"]');
+    productSelect.addEventListener("change", (e) => {
+        const p = products.find(
+            (item) => String(item.id) === String(e.target.value),
+        );
+        if (p) {
+            amountInput.placeholder = `Tối đa ${p.remaining}`;
+            amountInput.min = 1;
+            amountInput.max = p.remaining;
+        }
+    });
+    setTimeout(() => {
+        createForm({
+            formId: "#orderForm",
+            initialValues,
+            fields: [
+                { name: "productId", required: true },
+                { name: "customerId", required: true },
+                { name: "amount" },
+                { name: "status" },
+            ],
+            onSubmit: async (values) => {
+                try {
+                    const selectedProduct = products.find(
+                        (p) => String(p.id) === String(values.productId),
+                    );
+                    const orderId = window.location.hash.split("/").pop();
+                    let finalRemaining;
+                    if (orderId && !isNaN(orderId)) {
+                        const isOrder = ordersRes.find(
+                            (o) => Number(o.id) === Number(orderId),
+                        );
+                        const oldOrderAmount = Number(isOrder.amount);
+                        const newOrderAmount = Number(values.amount);
+                        const currentInventory = Number(
+                            selectedProduct.remaining,
+                        );
+                        finalRemaining =
+                            currentInventory + oldOrderAmount - newOrderAmount;
+                    } else {
+                        finalRemaining =
+                            Number(selectedProduct.remaining) -
+                            Number(values.amount);
+                    }
+                    if (!selectedProduct) {
+                        alert("Sản phẩm không tồn tại!");
+                        return;
+                    }
+                    if (finalRemaining < 0) {
+                        alert(
+                            `Kho không đủ! Hiện còn: ${selectedProduct.remaining}`,
+                        );
+                        return;
+                    }
+                    let response;
+                    if (id) {
+                        response = await fetchData.update("orders", {
+                            ...values,
+                            id,
+                        });
+                        window.location.hash = "/orders";
+                    } else {
+                        response = await fetchData.create("orders", {
+                            ...values,
+                            status: "pending",
+                        });
+                        resetForm("#orderForm");
+                    }
+                    if (response) {
+                        const payload = validateDataPayload.product(
+                            selectedProduct.category?.id,
+                            selectedProduct.name,
+                            {
+                                ...selectedProduct,
+                                id: selectedProduct.id,
+                                remaining: Math.floor(Number(finalRemaining)),
+                            },
+                        );
+                        await fetchData.update("products", payload);
+                    }
+                } catch (error) {
+                    console.error("Lỗi khi lưu đơn hàng:", error);
+                }
+            },
+            onCancel: () => (window.location.hash = "/orders"),
+        });
+    });
+    return container;
+}

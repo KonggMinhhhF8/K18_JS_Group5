@@ -60,10 +60,13 @@ export async function customer() {
     const select = container.querySelector("select");
 
     async function loadAndRender() {
-        const [customers, orders] = await Promise.all([
-            fetchData.get("customers"),
-            fetchData.get("orders"),
-        ]);
+        // const [customers, orders] = await Promise.all([
+        //     fetchData.get("customers"),
+        //     fetchData.get("orders"),
+        // ]);
+
+        const customers = await fetchData.get("customers");
+        const orders = await fetchData.get("orders");
 
         const columns = [
             {

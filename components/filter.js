@@ -52,7 +52,7 @@ export function createFilter({
         });
     }
     if (searchEl) searchEl.addEventListener("input", applyFilter);
-    if (dateEl) selectEl.addEventListener("change", applyFilter);
+    if (dateEl) dateEl.addEventListener("change", applyFilter);
     render(filteredData);
     return {
         getData: () => filteredData,

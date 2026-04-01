@@ -1,5 +1,8 @@
 export function commonTable(container, columns, dataSource) {
-    const parent = typeof container === "string" ? document.querySelector(container) : container;
+    const parent =
+        typeof container === "string"
+            ? document.querySelector(container)
+            : container;
     if (!parent) return;
 
     const table = document.createElement("table");

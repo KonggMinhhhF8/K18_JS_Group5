@@ -11,26 +11,26 @@
 // }
 // */
 
-const summaryListFake = [
-    {
-        cardColor: "blue",
-        title: "Doanh Thu",
-        value: 20,
-        valueColor: null,
-    },
-    {
-        cardColor: "red",
-        title: "string",
-        value: "1 trieu",
-        valueColor: "red",
-        trend: {
-            trendValue: "string",
-            isTrendUp: true,
-        },
-    },
-];
+// const summaryListFake = [
+//     {
+//         cardColor: "blue",
+//         title: "Doanh Thu",
+//         value: 20,
+//         valueColor: null,
+//     },
+//     {
+//         cardColor: "red",
+//         title: "string",
+//         value: "1 trieu",
+//         valueColor: "red",
+//         trend: {
+//             trendValue: "string",
+//             isTrendUp: true,
+//         },
+//     },
+// ];
 
-export function createSummary(summaryList = summaryListFake) {
+export function createSummary(summaryList) {
     const sumarySection = document.createElement("section");
     sumarySection.classList.add("stats");
 
