@@ -92,6 +92,22 @@ body {
     min-height: 100vh;
 }
 
+.loader {
+    position: fixed;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -40%);
+    z-index: 9999;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border-radius: 5px;
+}
+
+.hidden {
+    display: none;
+}
+
 /* Sidebar */
 .sidebar {
     width: 260px;

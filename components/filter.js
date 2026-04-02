@@ -20,7 +20,7 @@ export function createFilter({
                     activeTab?.dataset.value || activeTab?.innerText || "";
             }
         }
-        const dateValue = dateEl?.value || "";
+        let dateValue = dateEl?.value || "";
         filteredData = data.filter((item) => {
             const matchKeyword = searchFields.length
                 ? searchFields.some((field) =>

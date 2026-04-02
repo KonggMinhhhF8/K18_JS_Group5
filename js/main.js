@@ -84,8 +84,21 @@ const getPath = () => {
     return hash.startsWith("/") ? hash : `/${hash}`;
 };
 
+const toggleLoading = (isLoading) => {
+    const loader = document.querySelector("#loader");
+    if (isLoading) {
+        loader.classList.remove("hidden");
+        app.style.opacity = "0"; // コンテンツを薄くする
+    } else {
+        loader.classList.add("hidden");
+        app.style.opacity = "1";
+    }
+};
+
 const render = async () => {
     try {
+        toggleLoading(true);
+
         // check refresh token
         const isAuth = await checkAndRefreshToken();
         if (!isAuth) {
@@ -99,11 +112,12 @@ const render = async () => {
 
         const match = matchRoute(path, routes);
         document.querySelector("#sidebar").innerHTML = sidebar(path);
-        app.innerHTML = "";
 
         if (match) {
             const { page, params } = match;
             const content = await page(params);
+
+            app.innerHTML = "";
             if (content instanceof HTMLElement) {
                 app.appendChild(content);
             } else {
@@ -116,6 +130,8 @@ const render = async () => {
         bindLinks();
     } catch (error) {
         console.error("Lỗi hệ thống:", error);
+    } finally {
+        toggleLoading(false);
     }
 };
 

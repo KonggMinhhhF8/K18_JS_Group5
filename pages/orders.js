@@ -606,6 +606,7 @@ export async function order() {
 
     const today = new Date();
     dateInput.value = formatDate(today);
+    dateInput.setAttribute("max", formatDate(today));
 
     async function loadAndRender() {
         const orders = await fetchData.get("orders");
