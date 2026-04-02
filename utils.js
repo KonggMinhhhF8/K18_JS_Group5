@@ -216,7 +216,7 @@ export function createActionButtons({
     container.className = "action-buttons";
     const editBtn = document.createElement("button");
     editBtn.className = "btn-icon edit";
-    editBtn.title = "Thay đổi";
+    editBtn.title = "Chỉnh sửa";
     editBtn.innerHTML = `<i class="fas fa-edit"></i>`;
     editBtn.onclick = () => (window.location.hash = `/${endpoint}/edit/${id}`);
 
@@ -308,6 +308,10 @@ export function createActionButtons({
             };
 
             container.append(editBtn, updateBtn, cancelBtn);
+
+            if (currentObject?.status === "delivering") {
+                container.removeChild(editBtn);
+            }
         } else {
             container.append(viewBtn, deleteBtn);
         }
