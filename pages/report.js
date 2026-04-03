@@ -1,18 +1,4 @@
 import { fetchData } from "../apis/api.js";
-import { checkAndRefreshToken } from "../apis/auth.js";
-
-// Load Chart.js động nếu chưa có (không cần sửa index.html của người khác)
-function loadChartJS() {
-    return new Promise((resolve, reject) => {
-        if (window.Chart) return resolve(); // đã có rồi
-        const script = document.createElement("script");
-        script.src =
-            "https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js";
-        script.onload = resolve;
-        script.onerror = reject;
-        document.head.appendChild(script);
-    });
-}
 
 // HELPERS
 function calcRevenue(order) {
@@ -428,9 +414,6 @@ export async function report() {
     buildStatsGrid(container);
     buildCharts(container);
     buildTopProducts(container);
-
-    // Load Chart.js trước
-    await loadChartJS();
 
     // Fetch data
     let allOrders = [];

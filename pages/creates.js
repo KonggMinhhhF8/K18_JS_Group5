@@ -210,7 +210,6 @@ export async function createProduct(params = {}) {
 // Create order (Cường)
 export async function createOrder() {
     const products = await fetchData.get("products");
-
     const customers = await fetchData.get("customers");
 
     const container = document.createElement("div");
