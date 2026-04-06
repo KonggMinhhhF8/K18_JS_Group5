@@ -5,11 +5,7 @@ import { order } from "../pages/orders.js";
 import { customer } from "../pages/customer.js";
 import { report } from "../pages/report.js";
 import { checkAndRefreshToken } from "../apis/auth.js";
-import {
-    createProduct,
-    createOrder,
-    createCustomer,
-} from "../pages/creates.js";
+import { createProduct, createOrder, createCustomer } from "../pages/creates.js";
 
 const routes = {
     "/": home,
@@ -135,10 +131,11 @@ const render = async () => {
 };
 
 const bindLinks = () => {
-    document.querySelectorAll("a[data-link]").forEach((link) => {
+    document.querySelectorAll("li[data-link]").forEach((link) => {
         link.addEventListener("click", (e) => {
             e.preventDefault();
-            const href = link.getAttribute("href");
+            // const href = link.getAttribute("href");
+            const href = link.dataset.link;
             window.history.pushState(null, null, href);
             render();
         });

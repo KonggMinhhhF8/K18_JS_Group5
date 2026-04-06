@@ -27,9 +27,7 @@ const pageTitles = [
 ];
 
 export function sidebar(currentPath) {
-    const cleanCurrentPath = currentPath.startsWith("#")
-        ? currentPath.replace("#", "")
-        : currentPath;
+    const cleanCurrentPath = currentPath.startsWith("#") ? currentPath.replace("#", "") : currentPath;
 
     return `
             <h2 class="">ShopAdmin</h2>
@@ -43,12 +41,11 @@ export function sidebar(currentPath) {
                         if (cleanTargetPath === "/") {
                             isActive = cleanCurrentPath === "/";
                         } else {
-                            isActive =
-                                cleanCurrentPath.startsWith(cleanTargetPath);
+                            isActive = cleanCurrentPath.startsWith(cleanTargetPath);
                         }
 
                         return `
-                            <li class=${isActive ? "active" : ""}>
+                            <li class="${isActive ? "active" : ""}" data-link = "${item.path}">
                                 <a href="${item.path}" data-link >
                                     <span class="">${item.icon}</span>
                                     ${item.title}
